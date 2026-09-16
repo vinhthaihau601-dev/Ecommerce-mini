@@ -1,0 +1,188 @@
+{
+  "info": {
+    "name": "Ecommerce Mini API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "categoryId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "productId", "value": "" },
+    { "key": "variantId", "value": "" },
+    { "key": "orderId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "{{baseUrl}}/health" }
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/categories",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Áo\"\n}" }
+          }
+        },
+        { "name": "List", "request": { "method": "GET", "url": "{{baseUrl}}/api/categories" } },
+        { "name": "Get by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/categories/{{categoryId}}" } },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/categories/{{categoryId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Áo nam\"\n}" }
+          }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/categories/{{categoryId}}" } }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/users",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Thai\",\n  \"email\": \"thai@test.com\",\n  \"password\": \"123456\"\n}" }
+          }
+        },
+        {
+          "name": "Create - invalid email (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/users",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Bad\",\n  \"email\": \"abc\",\n  \"password\": \"123456\"\n}" }
+          }
+        },
+        { "name": "List", "request": { "method": "GET", "url": "{{baseUrl}}/api/users" } },
+        { "name": "Get by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/users/{{userId}}" } },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Thai Updated\"\n}" }
+          }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/users/{{userId}}" } }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/products",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Áo thun\",\n  \"categoryId\": \"{{categoryId}}\"\n}" }
+          }
+        },
+        { "name": "List (all)", "request": { "method": "GET", "url": "{{baseUrl}}/api/products" } },
+        {
+          "name": "List (filter by categoryId)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/products?categoryId={{categoryId}}" }
+        },
+        { "name": "Get by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/products/{{productId}}" } },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/products/{{productId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Áo thun cotton 100%\"\n}" }
+          }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/products/{{productId}}" } }
+      ]
+    },
+    {
+      "name": "Variant",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/variants",
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"color\": \"Đen\",\n  \"size\": \"M\",\n  \"price\": 150000\n}" }
+          }
+        },
+        { "name": "List (all)", "request": { "method": "GET", "url": "{{baseUrl}}/api/variants" } },
+        {
+          "name": "List (filter by productId)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/variants?productId={{productId}}" }
+        },
+        { "name": "Get by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/variants/{{variantId}}" } },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/variants/{{variantId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"stock\": 20\n}" }
+          }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/variants/{{variantId}}" } }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Update (upsert - tạo lần đầu nếu chưa có)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/carts/{{userId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [\n    { \"variantId\": \"{{variantId}}\", \"quantity\": 2 }\n  ]\n}" }
+          }
+        },
+        { "name": "Get", "request": { "method": "GET", "url": "{{baseUrl}}/api/carts/{{userId}}" } },
+        {
+          "name": "Update - quantity âm (expect 400)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/carts/{{userId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [\n    { \"variantId\": \"{{variantId}}\", \"quantity\": -5 }\n  ]\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"items\": [\n    {\n      \"variantId\": \"{{variantId}}\",\n      \"productName\": \"Áo thun\",\n      \"size\": \"M\",\n      \"color\": \"Đen\",\n      \"price\": 150000,\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 300000\n}"
+            }
+          }
+        },
+        { "name": "List by userId", "request": { "method": "GET", "url": "{{baseUrl}}/api/orders/{{userId}}" } },
+        {
+          "name": "Get one",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/orders/{{userId}}/{{orderId}}" }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/orders/{{orderId}}" } }
+      ]
+    }
+  ]
+}

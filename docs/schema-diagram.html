@@ -1,0 +1,293 @@
+<title>Lược Đồ Dữ Liệu Ecommerce Mini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --border: #DDD9CD;
+    --border-soft: #EAE7DE;
+    --text: #23261F;
+    --text-muted: #6B6E63;
+    --accent: #2E6B4F;
+    --accent-soft: #E1ECE5;
+    --accent2: #B5622C;
+    --accent2-soft: #F4E3D2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171A;
+      --surface: #1B1F21;
+      --border: #31363A;
+      --border-soft: #262B2E;
+      --text: #E8E6DE;
+      --text-muted: #9CA098;
+      --accent: #64B08E;
+      --accent-soft: #1E2E27;
+      --accent2: #E0975C;
+      --accent2-soft: #332720;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171A;
+    --surface: #1B1F21;
+    --border: #31363A;
+    --border-soft: #262B2E;
+    --text: #E8E6DE;
+    --text-muted: #9CA098;
+    --accent: #64B08E;
+    --accent-soft: #1E2E27;
+    --accent2: #E0975C;
+    --accent2-soft: #332720;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+  }
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  h1 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 600;
+    margin: 6px 0 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .intro {
+    max-width: 66ch;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .intro strong { color: var(--text); font-weight: 600; }
+  .intro code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--border-soft);
+    padding: 0.05em 0.35em;
+    border-radius: 4px;
+  }
+
+  .diagram-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  figure { margin: 0; }
+  svg { display: block; width: 100%; height: auto; min-width: 760px; }
+  figcaption {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  figcaption strong { color: var(--text); font-weight: 600; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 9px; }
+  .legend-item svg { width: 30px; height: 14px; flex: none; }
+  .legend-item b { color: var(--text); font-weight: 600; }
+
+  .badges {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .badges span { display: inline-flex; align-items: center; gap: 6px; }
+  .pk { color: var(--accent); font-weight: 600; }
+  .fk { color: var(--accent2); font-weight: 600; }
+</style>
+
+<div class="page">
+  <div>
+    <div class="eyebrow">MongoDB · Mongoose · 6 collections</div>
+    <h1>Lược Đồ Dữ Liệu Ecommerce Mini</h1>
+  </div>
+
+  <p class="intro">
+    Mỗi mũi tên là một tham chiếu <code>ObjectId</code> thật trong schema đã viết ở
+    <code>server/src/models/</code>. Đường <strong>liền, màu trung tính</strong> là quan hệ cấu trúc thường
+    (catalog phân cấp, user sở hữu cart/order). Hai đường tô màu ở dưới là điểm đáng chú ý nhất của thiết kế:
+    <strong>Cart</strong> và <strong>Order</strong> cùng trỏ tới <strong>Variant</strong>, nhưng theo hai cách
+    khác nhau hẳn.
+  </p>
+
+  <div class="diagram-wrap">
+    <figure>
+      <svg viewBox="0 0 1160 560" role="img" aria-label="Sơ đồ quan hệ 6 collection: Category phân cấp tới Product rồi Variant; User sở hữu một Cart và nhiều Order; Cart tham chiếu sống tới Variant còn Order chỉ lưu snapshot dữ liệu Variant tại thời điểm mua.">
+        <defs>
+          <marker id="arrN" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 Z" style="fill:currentColor" />
+          </marker>
+          <marker id="arrA" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 Z" style="fill:var(--accent)" />
+          </marker>
+          <marker id="arrA2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 Z" style="fill:var(--accent2)" />
+          </marker>
+        </defs>
+
+        <!-- ===== relation lines (drawn first, under the boxes) ===== -->
+        <g style="color:var(--text-muted)" fill="none" stroke="currentColor" stroke-width="1.5">
+          <!-- Category self reference (parentId) -->
+          <path d="M140,40 C140,12 258,12 258,40" marker-end="url(#arrN)" />
+          <!-- Category -> Product -->
+          <path d="M360,60 H420" marker-end="url(#arrN)" />
+          <!-- Product -> Variant -->
+          <path d="M740,60 H800" marker-end="url(#arrN)" />
+          <!-- User -> Cart -->
+          <path d="M360,344 H420" marker-end="url(#arrN)" />
+          <!-- User -> Order (routed below Cart) -->
+          <path d="M200,486 V522 H960 V508" marker-end="url(#arrN)" />
+        </g>
+
+        <!-- Cart -> Variant : live reference -->
+        <path d="M700,324 V278 H860 V224" fill="none" style="stroke:var(--accent)" stroke-width="2" marker-end="url(#arrA)" />
+        <!-- Order -> Variant : snapshot reference -->
+        <path d="M960,324 V224" fill="none" style="stroke:var(--accent2)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrA2)" />
+
+        <!-- relation labels -->
+        <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="var(--text-muted)">
+          <text x="199" y="26" text-anchor="middle">cha – con</text>
+          <text x="390" y="52" text-anchor="middle">1 → *</text>
+          <text x="770" y="52" text-anchor="middle">1 → *</text>
+          <text x="390" y="336" text-anchor="middle">1 → 1</text>
+          <text x="580" y="514" text-anchor="middle">1 → *</text>
+        </g>
+        <text x="712" y="270" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" style="fill:var(--accent)">* → 1 · sống</text>
+        <text x="972" y="276" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" style="fill:var(--accent2)">* → 0..1 · snapshot</text>
+
+        <!-- ===== CATEGORY ===== -->
+        <g>
+          <rect x="40" y="40" width="320" height="118" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <rect x="40" y="40" width="320" height="40" rx="8" fill="var(--accent-soft)" />
+          <rect x="40" y="68" width="320" height="12" fill="var(--accent-soft)" />
+          <line x1="40" y1="80" x2="360" y2="80" stroke="var(--border)" />
+          <text x="56" y="65" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">CATEGORY</text>
+          <text x="56" y="96" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)"><tspan class="pk" style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="56" y="118" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">name <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="56" y="140" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent2);font-weight:600">parentId</tspan><tspan fill="var(--text-muted)"> : ObjectId → Category</tspan></text>
+        </g>
+
+        <!-- ===== PRODUCT ===== -->
+        <g>
+          <rect x="420" y="40" width="320" height="162" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <line x1="420" y1="80" x2="740" y2="80" stroke="var(--border)" />
+          <text x="436" y="65" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">PRODUCT</text>
+          <text x="436" y="96" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="436" y="118" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">name <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="436" y="140" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">description <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="436" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">images <tspan fill="var(--text-muted)">: String[]</tspan></text>
+          <text x="436" y="184" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent2);font-weight:600">categoryId</tspan><tspan fill="var(--text-muted)"> : ObjectId → Category</tspan></text>
+        </g>
+
+        <!-- ===== VARIANT ===== -->
+        <g>
+          <rect x="800" y="40" width="320" height="184" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <line x1="800" y1="80" x2="1120" y2="80" stroke="var(--border)" />
+          <text x="816" y="65" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">VARIANT</text>
+          <text x="816" y="96" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="816" y="118" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent2);font-weight:600">productId</tspan><tspan fill="var(--text-muted)"> : ObjectId → Product</tspan></text>
+          <text x="816" y="140" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">color <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="816" y="162" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">size <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="816" y="184" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">price <tspan fill="var(--text-muted)">: Number</tspan></text>
+          <text x="816" y="206" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">stock <tspan fill="var(--text-muted)">: Number</tspan></text>
+        </g>
+
+        <!-- ===== USER ===== -->
+        <g>
+          <rect x="40" y="324" width="320" height="162" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <line x1="40" y1="364" x2="360" y2="364" stroke="var(--border)" />
+          <text x="56" y="349" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">USER</text>
+          <text x="56" y="380" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="56" y="402" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">name <tspan fill="var(--text-muted)">: String</tspan></text>
+          <text x="56" y="424" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">email <tspan fill="var(--text-muted)">: String (unique)</tspan></text>
+          <text x="56" y="446" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">password <tspan fill="var(--text-muted)">: String (hash)</tspan></text>
+          <text x="56" y="468" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">role <tspan fill="var(--text-muted)">: enum</tspan></text>
+        </g>
+
+        <!-- ===== CART ===== -->
+        <g>
+          <rect x="420" y="324" width="320" height="118" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <line x1="420" y1="364" x2="740" y2="364" stroke="var(--border)" />
+          <text x="436" y="349" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">CART</text>
+          <text x="436" y="380" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="436" y="402" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent2);font-weight:600">userId</tspan><tspan fill="var(--text-muted)"> : ObjectId → User (unique)</tspan></text>
+          <text x="436" y="424" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">items <tspan fill="var(--text-muted)">: CartItem[]</tspan></text>
+        </g>
+
+        <!-- ===== ORDER ===== -->
+        <g>
+          <rect x="800" y="324" width="320" height="184" rx="8" fill="var(--surface)" stroke="var(--border)" />
+          <line x1="800" y1="364" x2="1120" y2="364" stroke="var(--border)" />
+          <text x="816" y="349" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" font-weight="600" fill="var(--text)" letter-spacing="0.03em">ORDER</text>
+          <text x="816" y="380" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent);font-weight:600">_id</tspan><tspan fill="var(--text-muted)"> : ObjectId</tspan></text>
+          <text x="816" y="402" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12"><tspan style="fill:var(--accent2);font-weight:600">userId</tspan><tspan fill="var(--text-muted)"> : ObjectId → User</tspan></text>
+          <text x="816" y="424" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">items <tspan fill="var(--text-muted)">: OrderItem[] (snapshot)</tspan></text>
+          <text x="816" y="446" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">totalAmount <tspan fill="var(--text-muted)">: Number</tspan></text>
+          <text x="816" y="468" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">status <tspan fill="var(--text-muted)">: enum</tspan></text>
+          <text x="816" y="490" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="var(--text)">shippingAddress <tspan fill="var(--text-muted)">: String</tspan></text>
+        </g>
+      </svg>
+      <figcaption>
+        <strong>Catalog phân cấp</strong> (hàng trên): Category → Product → Variant, cộng thêm Category tự tham
+        chiếu để có cha–con. <strong>Người dùng</strong> (hàng dưới): User có đúng 1 Cart và nhiều Order.
+        Cart trỏ tới Variant bằng đường <strong style="color:var(--accent)">xanh liền</strong> — luôn join sống
+        để lấy giá/tên mới nhất. Order trỏ tới Variant bằng đường
+        <strong style="color:var(--accent2)">cam đứt</strong> — chỉ tham khảo, vì Order đã copy sẵn
+        <code>productName / size / color / price</code> nên vẫn đúng dù Variant gốc bị đổi giá hoặc bị xoá sau này.
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <svg viewBox="0 0 30 14"><line x1="2" y1="7" x2="28" y2="7" stroke="var(--text-muted)" stroke-width="1.5" /></svg>
+      <span>quan hệ cấu trúc (ref bắt buộc)</span>
+    </div>
+    <div class="legend-item">
+      <svg viewBox="0 0 30 14"><line x1="2" y1="7" x2="28" y2="7" style="stroke:var(--accent)" stroke-width="2" /></svg>
+      <span><b>Cart → Variant</b> — tham chiếu sống</span>
+    </div>
+    <div class="legend-item">
+      <svg viewBox="0 0 30 14"><line x1="2" y1="7" x2="28" y2="7" style="stroke:var(--accent2)" stroke-width="2" stroke-dasharray="5 4" /></svg>
+      <span><b>Order → Variant</b> — snapshot, optional</span>
+    </div>
+    <div class="badges">
+      <span class="pk">■ PK</span>
+      <span class="fk">■ FK</span>
+    </div>
+  </div>
+</div>
