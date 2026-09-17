@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from "../controllers/product.controller";
+import { asyncHandler } from "../middlewares/asyncHandler";
 
 const routes = Router()
 
@@ -36,7 +37,7 @@ const routes = Router()
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-routes.get("/", getProducts)
+routes.get("/", asyncHandler(getProducts))
 
 /**
  * @openapi
@@ -64,7 +65,7 @@ routes.get("/", getProducts)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.get("/:id", getProduct)
+routes.get("/:id", asyncHandler(getProduct))
 
 /**
  * @openapi
@@ -92,7 +93,7 @@ routes.get("/:id", getProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.post("/", createProduct)
+routes.post("/", asyncHandler(createProduct))
 
 /**
  * @openapi
@@ -132,7 +133,7 @@ routes.post("/", createProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.patch("/:id", updateProduct)
+routes.patch("/:id", asyncHandler(updateProduct))
 
 /**
  * @openapi
@@ -156,6 +157,6 @@ routes.patch("/:id", updateProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.delete("/:id", deleteProduct)
+routes.delete("/:id", asyncHandler(deleteProduct))
 
 export default routes

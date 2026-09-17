@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createUser, deleteUser, getUser, getUsers, updateUser } from "../controllers/user.controller";
+import { asyncHandler } from "../middlewares/asyncHandler";
 
 const router = Router()
 
@@ -26,7 +27,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', getUsers)
+router.get('/', asyncHandler(getUsers))
 
 /**
  * @openapi
@@ -54,7 +55,7 @@ router.get('/', getUsers)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getUser)
+router.get('/:id', asyncHandler(getUser))
 
 /**
  * @openapi
@@ -82,7 +83,7 @@ router.get('/:id', getUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createUser)
+router.post('/', asyncHandler(createUser))
 
 /**
  * @openapi
@@ -116,7 +117,7 @@ router.post('/', createUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch('/:id', updateUser)
+router.patch('/:id', asyncHandler(updateUser))
 
 /**
  * @openapi
@@ -140,6 +141,6 @@ router.patch('/:id', updateUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteUser)
+router.delete('/:id', asyncHandler(deleteUser))
 
 export default router

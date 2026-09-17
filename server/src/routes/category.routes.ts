@@ -6,6 +6,7 @@ import {
 	updateCategory,
 	deleteCategory,
 } from '../controllers/category.controller';
+import { asyncHandler } from '../middlewares/asyncHandler';
 
 const router = Router();
 
@@ -32,7 +33,7 @@ const router = Router();
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get('/', getCategories);
+router.get('/', asyncHandler(getCategories));
 
 /**
  * @openapi
@@ -60,7 +61,7 @@ router.get('/', getCategories);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getCategory);
+router.get('/:id', asyncHandler(getCategory));
 
 /**
  * @openapi
@@ -88,7 +89,7 @@ router.get('/:id', getCategory);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createCategory);
+router.post('/', asyncHandler(createCategory));
 
 /**
  * @openapi
@@ -122,7 +123,7 @@ router.post('/', createCategory);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch('/:id', updateCategory);
+router.patch('/:id', asyncHandler(updateCategory));
 
 /**
  * @openapi
@@ -146,6 +147,6 @@ router.patch('/:id', updateCategory);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteCategory);
+router.delete('/:id', asyncHandler(deleteCategory));
 
 export default router;

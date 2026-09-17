@@ -6,6 +6,7 @@ import {
     getVariants,
     updateVariant,
 } from "../controllers/variant.controller";
+import { asyncHandler } from "../middlewares/asyncHandler";
 
 const router = Router()
 
@@ -32,7 +33,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Variant'
  */
-router.get("/", getVariants)
+router.get("/", asyncHandler(getVariants))
 
 /**
  * @openapi
@@ -60,7 +61,7 @@ router.get("/", getVariants)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/:id", getVariant)
+router.get("/:id", asyncHandler(getVariant))
 
 /**
  * @openapi
@@ -88,7 +89,7 @@ router.get("/:id", getVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", createVariant)
+router.post("/", asyncHandler(createVariant))
 
 /**
  * @openapi
@@ -122,7 +123,7 @@ router.post("/", createVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", updateVariant)
+router.patch("/:id", asyncHandler(updateVariant))
 
 /**
  * @openapi
@@ -146,6 +147,6 @@ router.patch("/:id", updateVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id", deleteVariant)
+router.delete("/:id", asyncHandler(deleteVariant))
 
 export default router
