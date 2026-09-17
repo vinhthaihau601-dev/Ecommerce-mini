@@ -10,6 +10,7 @@ import cartRoutes from './routes/cart.routes';
 import orderRoutes from './routes/order.routes';
 import productRoutes from './routes/product.routes';
 import variantRoutes from './routes/variant.routes';
+import { notFoundHandler, errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -31,6 +32,9 @@ app.use('/api/carts', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/variants', variantRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 mongoose
 	.connect(MONGODB_URI)

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createOrder, deleteOrder, getOrder, getOrders } from "../controllers/order.controller";
+import { asyncHandler } from "../middlewares/asyncHandler";
 
 const routes = Router()
 
@@ -36,7 +37,7 @@ const routes = Router()
  *               items:
  *                 $ref: '#/components/schemas/Order'
  */
-routes.get("/:userId", getOrders)
+routes.get("/:userId", asyncHandler(getOrders))
 
 /**
  * @openapi
@@ -69,7 +70,7 @@ routes.get("/:userId", getOrders)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.get("/:userId/:id", getOrder)
+routes.get("/:userId/:id", asyncHandler(getOrder))
 
 /**
  * @openapi
@@ -97,7 +98,7 @@ routes.get("/:userId/:id", getOrder)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.post("/", createOrder)
+routes.post("/", asyncHandler(createOrder))
 
 /**
  * @openapi
@@ -121,6 +122,6 @@ routes.post("/", createOrder)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.delete("/:id", deleteOrder)
+routes.delete("/:id", asyncHandler(deleteOrder))
 
 export default routes

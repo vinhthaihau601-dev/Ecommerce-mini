@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getCart, updateCart } from "../controllers/cart.controller";
+import { asyncHandler } from "../middlewares/asyncHandler";
 
 const routes = Router()
 
@@ -39,7 +40,7 @@ const routes = Router()
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.get("/:userId", getCart)
+routes.get("/:userId", asyncHandler(getCart))
 
 /**
  * @openapi
@@ -73,6 +74,6 @@ routes.get("/:userId", getCart)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.patch("/:userId", updateCart)
+routes.patch("/:userId", asyncHandler(updateCart))
 
 export default routes
