@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { User } from "../models";
 import { userSchema, updateUserSchema } from "../schema/userSchema";
+import { hashPassWord } from "../utils/pw";
 
 // FIX: loại field password khỏi mọi response — trước đây trả cả password ra client
 const PUBLIC_FIELDS = "-password";
@@ -22,10 +23,10 @@ export async function createUser(req: Request, res: Response) {
         res.status(400).json({ error: "Name, email and password cannot be empty" })
         return
     }
-    // TODO: hash password bằng bcrypt trước khi lưu khi làm phần auth (hiện đang lưu plaintext)
     // FIX: dùng parsed.data (đã qua zod) thay vì req.body thô — tránh mass assignment (client
     // nhét thêm field lạ vào body sẽ không lọt vào document)
-    const user = await User.create(parsed.data)
+    const hashedPw = await hashPassWord(parsed.data.password)
+    const user = await User.create({ ...parsed.data, password: hashedPw })
     const { password: _password, ...userWithoutPassword } = user.toObject()
     res.status(200).json({ success: true, mess: "User create success", user: userWithoutPassword })
 }
@@ -39,9 +40,13 @@ export async function updateUser(req: Request, res: Response) {
         return
     }
 
+    const updateData = parsed.data.password
+        ? { ...parsed.data, password: await hashPassWord(parsed.data.password) }
+        : parsed.data
+
     const user = await User.findByIdAndUpdate(
         req.params.id,
-        parsed.data,
+        updateData,
         { new: true }
     ).select(PUBLIC_FIELDS)
 
