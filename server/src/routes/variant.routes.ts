@@ -6,6 +6,9 @@ import {
     getVariants,
     updateVariant,
 } from "../controllers/variant.controller";
+import validationSchema from "../middleware/validate";
+import { updateVariantSchema, variantSchema } from "../schema/variantSchema";
+import validateObjectId from "../middleware/validateObjectId";
 
 const router = Router()
 
@@ -32,7 +35,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Variant'
  */
-router.get("/", getVariants)
+router.get("/", validationSchema(variantSchema), getVariants)
 
 /**
  * @openapi
@@ -60,7 +63,7 @@ router.get("/", getVariants)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/:id", getVariant)
+router.get("/:id", validateObjectId, getVariant)
 
 /**
  * @openapi
@@ -88,7 +91,7 @@ router.get("/:id", getVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", createVariant)
+router.post("/", validationSchema(variantSchema), createVariant)
 
 /**
  * @openapi
@@ -122,7 +125,7 @@ router.post("/", createVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", updateVariant)
+router.patch("/:id", validationSchema(updateVariantSchema), validateObjectId, updateVariant)
 
 /**
  * @openapi
@@ -146,6 +149,6 @@ router.patch("/:id", updateVariant)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id", deleteVariant)
+router.delete("/:id", validateObjectId, deleteVariant)
 
 export default router

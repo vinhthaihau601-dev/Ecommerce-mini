@@ -14,3 +14,8 @@ export const userSchema = z.object({
 })
 
 export const updateUserSchema = userSchema.partial()
+
+export const loginSchema = z.object({
+    email: z.string().trim().min(1, "This field is required").max(255).email("Invalid email"),
+    password: NonEmptyTrimmedString,
+})

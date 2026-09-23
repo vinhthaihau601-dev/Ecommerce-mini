@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { getCart, updateCart } from "../controllers/cart.controller";
+import validationSchema from "../middleware/validate";
+import { updateCartSchema } from "../schema/cartSchema";
 
 const routes = Router()
 
@@ -73,6 +75,6 @@ routes.get("/:userId", getCart)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.patch("/:userId", updateCart)
+routes.patch("/:userId", validationSchema(updateCartSchema), updateCart)
 
 export default routes

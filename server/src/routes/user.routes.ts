@@ -1,5 +1,11 @@
 import { Router } from "express";
 import { createUser, deleteUser, getUser, getUsers, updateUser } from "../controllers/user.controller";
+import authenticate from "../middleware/user/auth";
+import authorize from "../middleware/user/authorize";
+import validationSchema from "../middleware/validate";
+import { updateUserSchema, userSchema } from "../schema/userSchema";
+import requireSelfOrAdmin from "../middleware/user/requireSelfOrAdmin";
+import validateObjectId from "../middleware/validateObjectId";
 
 const router = Router()
 
@@ -26,7 +32,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', getUsers)
+router.get('/', authenticate, authorize('admin'), getUsers)
 
 /**
  * @openapi
@@ -54,7 +60,7 @@ router.get('/', getUsers)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getUser)
+router.get('/:id', authenticate, validateObjectId, getUser)
 
 /**
  * @openapi
@@ -82,7 +88,7 @@ router.get('/:id', getUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createUser)
+router.post('/', validationSchema(userSchema), createUser)
 
 /**
  * @openapi
@@ -116,7 +122,7 @@ router.post('/', createUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch('/:id', updateUser)
+router.patch('/:id', validationSchema(updateUserSchema), authenticate, requireSelfOrAdmin, validateObjectId, updateUser)
 
 /**
  * @openapi
@@ -140,6 +146,6 @@ router.patch('/:id', updateUser)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteUser)
+router.delete('/:id', authenticate, requireSelfOrAdmin, authorize('admin'), validateObjectId, deleteUser)
 
 export default router

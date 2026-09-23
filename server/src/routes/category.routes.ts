@@ -6,6 +6,7 @@ import {
 	updateCategory,
 	deleteCategory,
 } from '../controllers/category.controller';
+import validateObjectId from '../middleware/validateObjectId';
 
 const router = Router();
 
@@ -60,7 +61,7 @@ router.get('/', getCategories);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getCategory);
+router.get('/:id', validateObjectId, getCategory);
 
 /**
  * @openapi
@@ -122,7 +123,7 @@ router.post('/', createCategory);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch('/:id', updateCategory);
+router.patch('/:id', validateObjectId, updateCategory);
 
 /**
  * @openapi
@@ -146,6 +147,6 @@ router.patch('/:id', updateCategory);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteCategory);
+router.delete('/:id', validateObjectId, deleteCategory);
 
 export default router;

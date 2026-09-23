@@ -1,5 +1,8 @@
 import { Router } from "express";
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from "../controllers/product.controller";
+import validationSchema from "../middleware/validate";
+import { productSchema, updateProductSchema } from "../schema/productSchema";
+import validateObjectId from "../middleware/validateObjectId";
 
 const routes = Router()
 
@@ -64,7 +67,7 @@ routes.get("/", getProducts)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.get("/:id", getProduct)
+routes.get("/:id", validateObjectId, getProduct)
 
 /**
  * @openapi
@@ -92,7 +95,7 @@ routes.get("/:id", getProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.post("/", createProduct)
+routes.post("/", validationSchema(productSchema), createProduct)
 
 /**
  * @openapi
@@ -132,7 +135,7 @@ routes.post("/", createProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.patch("/:id", updateProduct)
+routes.patch("/:id", validationSchema(updateProductSchema), validateObjectId, updateProduct)
 
 /**
  * @openapi
@@ -156,6 +159,6 @@ routes.patch("/:id", updateProduct)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-routes.delete("/:id", deleteProduct)
+routes.delete("/:id", validateObjectId, deleteProduct)
 
 export default routes

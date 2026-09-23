@@ -6,12 +6,20 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
 import categoryRoutes from './routes/category.routes';
 import userRoutes from './routes/user.routes';
+import authRoutes from './routes/auth.routes';
 import cartRoutes from './routes/cart.routes';
 import orderRoutes from './routes/order.routes';
 import productRoutes from './routes/product.routes';
 import variantRoutes from './routes/variant.routes';
+import errorHandler from './middleware/error/errorHandler';
 
 const app = express();
+
+// chỉ tin header X-Forwarded-For khi chạy sau proxy thật (production) — bật ở local sẽ cho
+// phép client tự giả IP qua header, làm req.ip sai và có thể bypass rate limiter
+if (process.env.NODE_ENV === 'production') {
+	app.set('trust proxy', true);
+}
 
 app.use(cors());
 app.use(express.json()); // parse JSON body — thiếu dòng này req.body sẽ undefined
@@ -25,12 +33,14 @@ app.get('/health', (_req, res) => {
 	res.json({ status: 'ok' });
 });
 
+app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/variants', variantRoutes);
+app.use(errorHandler)
 
 mongoose
 	.connect(MONGODB_URI)
